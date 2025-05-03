@@ -1,33 +1,3 @@
-var myImage = document.querySelector("img");
-myImage.onclick = function(){
-    var mySrc = myImage.getAttribute("src");
-    if (mySrc === "images/actual life/_MG_5974.JPG") {
-        myImage.setAttribute("src", "images/summer 2024/20241013_191848.jpg");
-    } else {
-        myImage.setAttribute("src", "images/actual life/_MG_5974.JPG");
-    }
-};
-
-var myButton = document.querySelector("button");
-var myHeading = document.querySelector("h1");
-
-function setUserName(){
-    var myName = prompt("Enter your name.");
-    localStorage.setItem("name", myName);
-    myHeading.textContent = "Welcome, " + myName;
-};
-
-if (!localStorage.getItem("name")){
-    setUserName();
-} else {
-    var storedName = localStorage.getItem("name");
-    myHeading.textContent = "Welcome, " + storedName;
-};
-
-myButton.onclick = function(){
-    setUserName();
-};
-
 const albumData = {
     "here and nowhere else": [
         "images/here and nowhere else/20250107_220517.jpg"
@@ -51,44 +21,186 @@ const albumData = {
     "autumn 2024": [
         "images/autumn 2024/20241006_215039.jpg",
         "images/autumn 2024/20241006_214926.jpg",
-        "images/autumn 2024/20241006_215351.jpg",
+        "images/autumn 2024/20241006_215351.jpg"
     ]
 };
 
 const albumCards = document.querySelectorAll(".album-card");
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modal-title");
-const modalImages = document.querySelector(".modal-images");
+const sliderImage = document.querySelector(".slider-image");
+const leftArrow = document.querySelector(".slider-arrow.left");
+const rightArrow = document.querySelector(".slider-arrow.right");
 const closeButton = document.querySelector(".close-button");
+const filterButtons = document.querySelectorAll(".filter-btn");
+const searchInput = document.getElementById("search-input");
+const thumbnailContainer = document.querySelector(".thumbnail-container");
 
-albumCards.forEach(function(card) {
-    card.addEventListener("click", function() {
-        const albumName = this.textContent;
+let currentAlbum = [];
+let currentIndex = 0;
+
+// Show image with lazy loading
+function showImage(index) {
+    sliderImage.classList.remove("show");
+    setTimeout(() => {
+        sliderImage.src = currentAlbum[index];
+        updateThumbnails(index);
+    }, 200);
+}
+
+sliderImage.addEventListener("load", () => {
+    sliderImage.classList.add("show");
+});
+
+// Update thumbnails
+function updateThumbnails(activeIndex) {
+    const thumbnails = document.querySelectorAll(".thumbnail");
+    thumbnails.forEach((thumb, index) => {
+        thumb.classList.toggle("active", index === activeIndex);
+    });
+}
+
+// Create thumbnails
+function createThumbnails(album) {
+    thumbnailContainer.innerHTML = "";
+    album.forEach((src, index) => {
+        const thumb = document.createElement("img");
+        thumb.src = src;
+        thumb.classList.add("thumbnail");
+        thumb.alt = `Thumbnail ${index + 1}`;
+        thumb.loading = "lazy";
+        thumb.addEventListener("click", () => {
+            currentIndex = index;
+            showImage(currentIndex);
+        });
+        thumbnailContainer.appendChild(thumb);
+    });
+    updateThumbnails(currentIndex);
+}
+
+// Open modal
+albumCards.forEach(card => {
+    card.addEventListener("click", () => {
+        const albumName = card.querySelector("h3").textContent.trim();
         modalTitle.textContent = albumName;
+        currentAlbum = albumData[albumName] || [];
+        currentIndex = 0;
 
-        // Очистим старые изображения
-        modalImages.innerHTML = "";
-
-        // Добавим новые изображения
-        if (albumData[albumName]) {
-            albumData[albumName].forEach(function(imgSrc) {
-                const img = document.createElement("img");
-                img.src = imgSrc;
-                img.alt = "Album photo";
-                modalImages.appendChild(img);
-            });
-        }
-
+        showImage(currentIndex);
+        createThumbnails(currentAlbum);
         modal.style.display = "block";
+        document.body.style.overflow = "hidden";
     });
 });
 
-closeButton.onclick = function() {
-    modal.style.display = "none";
-};
+// Navigate images
+leftArrow.addEventListener("click", () => {
+    if (currentAlbum.length === 0) return;
+    currentIndex = (currentIndex - 1 + currentAlbum.length) % currentAlbum.length;
+    showImage(currentIndex);
+});
 
-window.onclick = function(event) {
+rightArrow.addEventListener("click", () => {
+    if (currentAlbum.length === 0) return;
+    currentIndex = (currentIndex + 1) % currentAlbum.length;
+    showImage(currentIndex);
+});
+
+// Close modal
+closeButton.addEventListener("click", () => {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+});
+
+window.addEventListener("click", event => {
     if (event.target === modal) {
         modal.style.display = "none";
+        document.body.style.overflow = "auto";
     }
-};
+});
+
+// Filter functionality
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const filter = button.getAttribute("data-filter");
+        
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        albumCards.forEach(card => {
+            const category = card.getAttribute("data-category");
+            if (filter === "all" || filter === category) {
+                card.style.display = "block";
+                setTimeout(() => {
+                    card.style.opacity = "1";
+                    card.style.transform = "translateY(0)";
+                }, 50);
+            } else {
+                card.style.opacity = "0";
+                card.style.transform = "translateY(20px)";
+                setTimeout(() => {
+                    card.style.display = "none";
+                }, 300);
+            }
+        });
+    });
+});
+
+// Search functionality
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    albumCards.forEach(card => {
+        const title = card.querySelector("h3").textContent.toLowerCase();
+        if (title.includes(query)) {
+            card.style.display = "block";
+            setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+            }, 50);
+        } else {
+            card.style.opacity = "0";
+            card.style.transform = "translateY(20px)";
+            setTimeout(() => {
+                card.style.display = "none";
+            }, 300);
+        }
+    });
+});
+
+// Card visibility on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+albumCards.forEach(card => {
+    card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    observer.observe(card);
+});
+
+// Swipe functionality for modal
+let touchStartX = 0;
+let touchEndX = 0;
+
+modal.addEventListener("touchstart", e => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+modal.addEventListener("touchend", e => {
+    touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 50) {
+        // Swipe left
+        if (currentAlbum.length === 0) return;
+        currentIndex = (currentIndex + 1) % currentAlbum.length;
+        showImage(currentIndex);
+    } else if (touchEndX - touchStartX > 50) {
+        // Swipe right
+        if (currentAlbum.length === 0) return;
+        currentIndex = (currentIndex - 1 + currentAlbum.length) % currentAlbum.length;
+        showImage(currentIndex);
+    }
+});

@@ -1,40 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="styles/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Actual Life - A photo project by Tamerlan Yessimov showcasing unique moments and memories through photography." />
+    <meta name="keywords" content="photography, art gallery, Tamerlan Yessimov, Actual Life" />
+    <meta name="author" content="Tamerlan Yessimov" />
+    <link href="styles/style.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet"> 
-    <title>Actual life</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> 
+    <title>Actual Life</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR-ID-HERE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YOUR-ID-HERE');
+    </script>
 </head>
 <body>
-    <h1>Actual life</h1>
-    <img src="images/actual life/_MG_5974.JPG" alt="lamp" width="400">
-    <p>"Actual life" is the photo-album made by <strong>Tamerlan Yessimov</strong> (aka <a href="https://www.instagram.com/a100milesahead/">a100milesahead</a>)</p>
-    
-    <h2>Gallery</h2>
-    <div class="albums">
-        <div class="album-card">here and nowhere else</div>
-        <div class="album-card">worm memories</div>
-        <div class="album-card">summer 2024</div>
-        <div class="album-card">actual life</div>
-        <div class="album-card">autumn 2024</div>
-    </div>
+    <header class="nav-header">
+        <nav class="nav-content">
+            <div class="logo">Actual Life</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
 
-    <button>Change user</button>
+    <section class="hero" id="home">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="footage/vecteezy_dynamic-grey-gradient-animation-smooth-gradient-background_10884695.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-content">
+            <h1>Actual Life</h1>
+            <p>A photo project by <strong>Tamerlan Yessimov</strong></p>
+            <section class="intro">
+                <p class="quote">
+                    "Actual life is an opportunity to express yourself. It is a collection of special memories that were sealed in the author's life. Each photo has its own unique history and origin."
+                </p>
+            </section>
+            <a href="#gallery" class="cta-button">Explore Gallery</a>
+        </div>
+    </section>
+
+    <section class="album-section" id="gallery">
+        <h2>Gallery</h2>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search albums..." />
+        </div>
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="here and nowhere else">Here and Nowhere Else</button>
+            <button class="filter-btn" data-filter="worm memories">Worm Memories</button>
+            <button class="filter-btn" data-filter="summer 2024">Summer 2024</button>
+            <button class="filter-btn" data-filter="actual life">Actual Life</button>
+            <button class="filter-btn" data-filter="autumn 2024">Autumn 2024</button>
+        </div>
+        <div class="album-grid">
+            <div class="album-card" data-category="here and nowhere else">
+                <img src="images/_MG_5974.JPG" alt="Here and nowhere else" loading="lazy" />
+                <h3>here and nowhere else</h3>
+            </div>
+            <div class="album-card" data-category="worm memories">
+                <img src="images/20241013_191848.jpg" alt="worm memories" loading="lazy" />
+                <h3>worm memories</h3>
+            </div>
+            <div class="album-card" data-category="summer 2024">
+                <img src="images/summer1.jpg" alt="summer 2024" loading="lazy" />
+                <h3>summer 2024</h3>
+            </div>
+            <div class="album-card" data-category="actual life">
+                <img src="images/actual1.jpg" alt="actual life" loading="lazy" />
+                <h3>actual life</h3>
+            </div>
+            <div class="album-card" data-category="autumn 2024">
+                <img src="images/autumn1.jpg" alt="autumn 2024" loading="lazy" />
+                <h3>autumn 2024</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <h2>About</h2>
+        <div class="about-content">
+            <p>
+                I am Tamerlan Yessimov, a photographer passionate about capturing the essence of life through my lens. 
+                "Actual Life" is a personal project that reflects my journey, memories, and emotions. Each photograph tells a story, 
+                preserving moments that are both fleeting and eternal. 
+            </p>
+            <p>
+                Inspired by the beauty of everyday life, I aim to create a visual narrative that resonates with viewers. 
+                Explore my gallery to see the world through my eyes.
+            </p>
+            <a href="https://instagram.com/a100milesahead" target="_blank" class="social-link">Follow me on Instagram</a>
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2025 Tamerlan Yessimov | <a href="https://instagram.com/a100milesahead" target="_blank">Instagram</a></p>
+    </footer>
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3 id="modal-title"></h3>
-            <div class="modal-images">
-                <img src="images/actual life/_MG_5974.JPG" alt="lamp">
-                <img src="images/summer 2024/20241013_191848.jpg" alt="the quiet place">
+            <span class="close-button">×</span>
+            <h2 id="modal-title"></h2>
+            <div class="modal-slider">
+                <span class="slider-arrow left">❮</span>
+                <img class="slider-image" src="" alt="Album photo">
+                <span class="slider-arrow right">❯</span>
+            </div>
+            <div class="thumbnail-container">
+                <!-- Thumbnails will be dynamically added here -->
             </div>
         </div>
     </div>
+
     <script src="scripts/main.js"></script>
 </body>
 </html>
