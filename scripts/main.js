@@ -27,3 +27,26 @@ if (!localStorage.getItem("name")){
 myButton.onclick = function(){
     setUserName();
 };
+
+var albumCards = document.querySelectorAll(".album-card");
+var modal = document.getElementById("modal");
+var modalTitle = document.getElementById("modal-title");
+var closeButton = document.querySelector(".close-button");
+
+albumCards.forEach(function(card) {
+    card.addEventListener("click", function(){
+        var albumName = this.textContent;
+        modalTitle.textContent = albumName;
+        modal.style.display = "block";
+    });
+});
+
+closeButton.onclick = function() {
+    modal.style.display = "none";
+};
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+};
